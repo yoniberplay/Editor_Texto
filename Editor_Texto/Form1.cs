@@ -28,11 +28,15 @@ namespace Editor_Texto
             Load_Preferences();
             Color bg = Color.FromName(prefs["Color de Fondo"]);
             Color fg = Color.FromName(prefs["Color de Texto"]);
-            txt_box.Font = var.ConvertFromString(prefs["Fuente"]) as Font;
+            cajatexto.Font = var.ConvertFromString(prefs["Fuente"]) as Font;
+            cajatexto.ScrollBars = ScrollBars.Vertical;
+            cajatexto.AcceptsReturn = true;
+            cajatexto.AcceptsTab = true;
+            cajatexto.WordWrap = true;
             this.ForeColor = fg;
-            txt_box.ForeColor = fg;
+            cajatexto.ForeColor = fg;
             this.BackColor = bg;
-            txt_box.BackColor = bg;
+            cajatexto.BackColor = bg;
         }
         private void File_Refresh()
         {
@@ -48,7 +52,7 @@ namespace Editor_Texto
         }
         private void Guardar(string file)
         {
-            File.WriteAllText(file, txt_box.Text);
+            File.WriteAllText(file, cajatexto.Text);
             this.Text = Path.GetFileName(file);
 
         }
@@ -80,7 +84,7 @@ namespace Editor_Texto
         private void nuevoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Text = "Nuevo";
-            txt_box.Clear();
+            cajatexto.Clear();
             saveFileDialog.Reset();
             openFileDialog.Reset();
             File_Refresh();
@@ -97,7 +101,7 @@ namespace Editor_Texto
             {
                 if (openFileDialog.ShowDialog()==DialogResult.OK)
                 {
-                    txt_box.Text = File.ReadAllText(openFileDialog.FileName);
+                    cajatexto.Text = File.ReadAllText(openFileDialog.FileName);
                     this.Text =  Path.GetFileName(openFileDialog.FileName);
                 }
             }
@@ -113,7 +117,7 @@ namespace Editor_Texto
             FontDialog font = new FontDialog();
             if (font.ShowDialog()==DialogResult.OK)
             {
-                txt_box.Font = font.Font;
+                cajatexto.Font = font.Font;
                 Save_Preferences();
             }
         }
@@ -140,7 +144,7 @@ namespace Editor_Texto
             if (forecolor!=Color.Empty)
             {
                 this.ForeColor = forecolor;
-                txt_box.ForeColor = forecolor;
+                cajatexto.ForeColor = forecolor;
                 Save_Preferences();
             }
         }
@@ -150,7 +154,7 @@ namespace Editor_Texto
             Color bgcolor = get_Color();
             if (bgcolor != Color.Empty)
             {
-                txt_box.BackColor = bgcolor;
+                cajatexto.BackColor = bgcolor;
                 this.BackColor = bgcolor;
                 Save_Preferences();
             }
@@ -158,9 +162,9 @@ namespace Editor_Texto
         private void Save_Preferences()
         {
             prefs.Clear();
-            prefs.Add("Color de Texto", txt_box.ForeColor.Name);
-            prefs.Add("Color de Fondo", txt_box.BackColor.Name);
-            prefs.Add("Fuente", var.ConvertToString(txt_box.Font));
+            prefs.Add("Color de Texto", cajatexto.ForeColor.Name);
+            prefs.Add("Color de Fondo", cajatexto.BackColor.Name);
+            prefs.Add("Fuente", var.ConvertToString(cajatexto.Font));
             string textfile =  JsonSerializer.Serialize(prefs); 
             File.WriteAllText("Preferences.json", textfile);
         }
@@ -178,23 +182,23 @@ namespace Editor_Texto
 
         private void copiarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txt_box.Copy();
+            cajatexto.Copy();
         }
 
         private void copiarTodoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txt_box.SelectAll();
-            txt_box.Copy();
+            cajatexto.SelectAll();
+            cajatexto.Copy();
         }
 
         private void pegarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txt_box.Paste();
+            cajatexto.Paste();
         }
 
         private void cortarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            txt_box.Cut();
+            cajatexto.Cut();
         }
 
     }
